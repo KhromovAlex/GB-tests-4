@@ -27,17 +27,46 @@ class MainActivityEspressoTest {
     }
 
     @Test
+    fun totalCountTextView_IsInvisible() {
+        onView(withId(R.id.totalCountTextView)).check(matches(withEffectiveVisibility(Visibility.INVISIBLE)))
+    }
+
+    @Test
+    fun toDetailsActivityButton_IsDisplayed() {
+        onView(withId(R.id.toDetailsActivityButton)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun toDetailsActivityButton_IsText() {
+        onView(withId(R.id.toDetailsActivityButton)).check(matches(withText("to details")))
+    }
+
+    @Test
+    fun activitySearch_IsDisplayed() {
+        onView(withId(R.id.searchEditText)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun activitySearch_IsEmptyText() {
+        onView(withId(R.id.searchEditText)).check(matches(withText("")))
+    }
+
+    @Test
+    fun activitySearch_IsEqualsInputText() {
+        onView(withId(R.id.searchEditText)).perform(click())
+        onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
+
+        onView(withId(R.id.searchEditText)).check(matches(withText("algol")))
+    }
+
+    @Test
     fun activitySearch_IsWorking() {
         onView(withId(R.id.searchEditText)).perform(click())
         onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
 
-        if (BuildConfig.TYPE == MainActivity.FAKE) {
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
-        } else {
-            onView(isRoot()).perform(delay())
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2283")))
-        }
+        onView(isRoot()).perform(delay())
+        onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2705")))
     }
 
     private fun delay(): ViewAction? {
